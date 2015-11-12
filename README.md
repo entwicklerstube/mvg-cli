@@ -1,2 +1,3 @@
-# mvg-cli
-Münchner Verkehrsgesellschaft - Command Line Interface
+<img src="resources/readme.logo.png" align="right" />
+# MVG - Command Line Interface
+Coming soon...
