@@ -7,7 +7,7 @@ export default function create(DOM) {
     trips = 0
     station = 'unknown'
     serverTime = '00:00'
-    subways = []
+    departures = []
 
     constructor() {
       this.$ = cheerio.load(DOM);
@@ -17,7 +17,7 @@ export default function create(DOM) {
       this.trips = this.$('.rowOdd, .rowEven').length;
       this.station = this.$('.headerStationColumn').text();
       this.serverTime = this.$('.serverTimeColumn').text();
-      this.subways = this.findByType('ubahn');
+      this.departures = this.findByType('ubahn');
     }
 
     findByType(type) {
@@ -35,11 +35,7 @@ export default function create(DOM) {
         });
       });
 
-      return [{
-        route: 'U6',
-        station: 'Garching-Forschungszentrum',
-        arrivingIn: 0
-      }];
+      return lines;
     }
 
     cleanStationTitle(title) {
