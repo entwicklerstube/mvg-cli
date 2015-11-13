@@ -4,8 +4,8 @@
   "description": "Command Line Interface for the Muenchner Vekehrsgesellschaft",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/**/*.js --require ./config/mocha.js --compilers js:babel/register",
-    "test-watch": "mocha test/**/*.js --require ./config/mocha.js --compilers js:babel/register --watch",
+    "test": "mocha test/* --require ./config/mocha.js --compilers js:babel/register",
+    "test-watch": "mocha test/* --require ./config/mocha.js --compilers js:babel/register --watch",
     "babel-node": "babel-node --stage 0",
     "develop": "nodemon --exec npm run babel-node -- src/index"
   },
