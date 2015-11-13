@@ -1,12 +1,28 @@
 import request from 'request';
 import cheerio from 'cheerio';
+import iconv from 'iconv-lite';
 
+const RequestURL = [
+  `https://`,  // protocol
+  `www.mvg-live.de`,  // url
+  `/ims/dfiStaticAuswahl.svc`, // endpoint
+  `?haltestelle=Hauptbahnhof`, // station of interesst
+  `&ubahn=checked`, // look for subway
+  `&bus=checked`, // look for bus
+  `&tram=checked`, // look for tram
+  `&sbahn=checked` // look for sbahn
+].join('');
 
-request('https://www.mvg-live.de/ims/dfiStaticAuswahl.svc?haltestelle=Goetheplatz&ubahn=checked&bus=checked&tram=checked&sbahn=checked', (err, res, body) => {
+request({
+  uri: RequestURL,
+  encoding: null
+}, (err, res, body) => {
   if(err && res.statusCode !== 200) throw 'Unexpected Error';
+  // console.log(body);
 
-  const $ = cheerio.load(body);
+  var utf8String = iconv.decode(new Buffer(body), "ISO-8859-1");
+  console.log(utf8String);
 
-  console.log($('table').html());
-
+  // const $ = cheerio.load(body);
+  // console.log($('table').html());
 });
