@@ -15,7 +15,13 @@ Dependencies:
 
 Usage:
 
-Edit the line station = u'Unterföhring' with your Station.
-eg: station = u'Universität' or station = u'Sendlinger Tor'
-and then do python mvg.py
+Edit the line "station = u'Unterföhring'" with your Station.
+eg: 
+    station = u'Universität' 
+    station = u'Sendlinger Tor'
+and then do 
+
+    python mvg.py
+
+<img src="resources/mvpy.png"/>
 
