@@ -1,8 +1,15 @@
-import request from 'request';
-import cheerio from 'cheerio';
-import iconv from 'iconv-lite';
+import chalk from 'chalk';
+import moment from 'moment';
 import readlineSync from 'readline-sync';
-import ParseTable from './utils/parseTable';
+import logUpdate from 'log-update';
+import LoadData from './utils/loadData';
+
+// Clear CLI
+process.stdout.write("\u001b[2J\u001b[0;0H");
+// Print a header
+console.log(
+  chalk.black.bgYellow('                    MVG                     ')
+);
 
 let startStation = undefined;
 
@@ -12,26 +19,51 @@ if(process.argv && process.argv[2]) {
   startStation = readlineSync.question('From what station do you want to start? : ')
 }
 
-const RequestURI = [
-  `https://`,  // protocol
-  `www.mvg-live.de`,  // url
-  `/ims/dfiStaticAuswahl.svc`, // endpoint
-  `?haltestelle=${startStation}`, // station of interesst
-  `&ubahn=checked`, // look for subway
-  `&bus=checked`, // look for bus
-  `&tram=checked`, // look for tram
-  `&sbahn=checked` // look for sbahn
-].join('');
+console.log(
+  chalk.yellow(`Show all trips from ${chalk.yellow.underline(startStation)}`)
+);
 
-request({
-  uri: RequestURI,
-  encoding: null
-}, (err, res, body) => {
-  if(err && res.statusCode !== 200) throw 'Error: Had problems to connect to mvg-page';
+let LiveData = [];
+let LastRefresh = +new Date()
 
-  const utf8String = iconv.decode(new Buffer(body), "ISO-8859-1");
-  console.log(ParseTable(utf8String).departures);
+const updateData = () => {
+  LoadData({
+    station: startStation
+  }, (err, data) => {
+    if(err) throw `Error: ${err}`;
+    LiveData = data;
+    LastRefresh = +new Date();
+  });
+}
+String.prototype.paddingLeft = function (paddingValue) {return String(paddingValue + this).slice(-paddingValue.length);};
 
-  // const $ = cheerio.load(body);
-  // console.log($('table').html());
-});
+updateData();
+
+setInterval(() => {
+  updateData();
+}, 5000);
+
+  let tmpl = '';
+setInterval(() => {
+  if(LiveData.length > 0) {
+    let deps = [];
+
+    // console.log(LiveData.departures);
+
+    LiveData.departures.map((dep) => {
+      deps.push(` ${chalk.white.bgRed(dep.route.paddingLeft("   ")+" ")} in ${dep.arrivingIn.paddingLeft("  ")} minutes to ${dep.station}\n`);
+    });
+
+
+    tmpl = `
+ ${chalk.black.bgWhite(`From ${LiveData.station}`)}  Last refresh: ${moment(LastRefresh).format('HH:mm:ss')}
+- - - - - - - - - - - - - - - - - - - - - - - - - - -
+${deps.join('')} - - - - - - - - - - - - - - - - - - - - - - - - - - -
+`;
+  } else {
+    tmpl = `
+    Loading...
+    `;
+  }
+  logUpdate(tmpl);
+},100);
