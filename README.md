@@ -25,5 +25,5 @@ and then do
 
     python mvg.py
 
-<img src="resources/mvpy.png"/>
+<img src="resources/mvpy.png" align="center"/>
 
