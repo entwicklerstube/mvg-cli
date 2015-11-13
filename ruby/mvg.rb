@@ -50,27 +50,27 @@ def getRides
         end
       end
 
-      puts 'U-Bahn'
+      puts 'U-Bahn'.colorize(:color => :white, :background => :blue)
       if(ubahn_ary.length == 0)
-        puts "Keine Einträge gefunden".red
+        puts "Keine Einträge gefunden".colorize(:color => :white, :background => :red)
       else
         ubahn_ary.each do |entry|
             puts entry.display_info
         end
       end
       puts '----------------------------------'
-      puts 'S-Bahn'
+      puts 'S-Bahn'.colorize(:color => :white, :background => :yellow)
       if(ubahn_ary.length == 0)
-        puts "Keine Einträge gefunden".red
+        puts "Keine Einträge gefunden".colorize(:color => :white, :background => :red)
       else
         sbahn_ary.each do |entry|
             puts entry.display_info
         end
       end
       puts '----------------------------------'
-      puts 'Bus'
+      puts 'Bus'.colorize(:color => :white, :background => :green)
       if(ubahn_ary.length == 0)
-        puts "Keine Einträge gefunden".red
+        puts "Keine Einträge gefunden".colorize(:color => :white, :background => :red)
       else
         bus_ary.each do |entry|
             puts entry.display_info
