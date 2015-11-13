@@ -19,10 +19,10 @@ describe('Table To Array', () => {
   });
 
   it('returns an array with the subway-data', () => {
-    expect(ParseTable(DOM).subways[0]).to.deep.equal({
+    expect(ParseTable(DOM).departures[0]).to.deep.equal({
       route: 'U6',
       station: 'Garching-Forschungszentrum',
-      arrivingIn: 0
+      arrivingIn: "0"
     });
   });
 
