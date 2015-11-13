@@ -3,7 +3,7 @@
 
 ## Node version
 <p align="center">
-  <img src="node-preview.gif"/>
+  <img src="resources/node-preview.gif"/>
 </p>
 Install
 ```
