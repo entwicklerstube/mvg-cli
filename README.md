@@ -46,13 +46,16 @@ and then do
 
 # Ruby version
 Dependencies:
+```
     gem install mechanize
     gem install colorize
-
+```
 
 Run it:
+```
     ruby mvg.rb Marienplatz
     ruby mvg.rb "Sendlinger Tor"
+```
 
 <img src="resources/mvprb.png" align="center"/>
 
