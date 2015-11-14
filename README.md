@@ -11,7 +11,7 @@ Checkout the MVG-traffic data by querying the arriving/deperature data from you 
 
 ## Contribute
 If you want the CLI in your programing language, just write it down and make a pull requests.
-Wishes / suggestions are welcome :)
+Wishes and suggestions are welcome :)
 
 ## Previews
 ### Node Preview
