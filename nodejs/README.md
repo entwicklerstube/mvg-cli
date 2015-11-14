@@ -1,4 +1,4 @@
-# MVG CLI
+# MVG CLI - NodeJS
 ### Install
 ```
 npm install mvg-cli -g
@@ -28,3 +28,6 @@ Visit our [Github-Repository](https://github.com/entwicklerstube/mvg-cli), you c
 
 ### Data source
 For this tool we crawl the official [MVG-Live](http://www.mvg-live.de/MvgLive/MvgLive.jsp) Page.
+
+### Preview
+![](resources/node-preview.gif)
