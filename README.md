@@ -5,9 +5,9 @@ Checkout the MVG-traffic data by querying the arriving/deperature data from you 
 
 | Language                   | Install                                                 | Usage            | Links
 | -------------------------- | ------------------------------------------------------- | ---------------- | --------------------------
-| <img src="resources/node.icon.png" width="100" />    | `npm install mvg -g`                                    | `mvg [station]`  | [Preview](#node-preview), [Docs](nodejs/README.md)
-| <img src="resources/python.icon.png" width="100" />  | `git clone git@github.com:entwicklerstube/mvg-cli.git`  | `python mvg.py`  | [Preview](#python-preview), [Docs](python/README.md)
-| <img src="resources/ruby.icon.png" width="100" />    | `gem install mvg`                                       | `mvg [station]`  | [Preview](#ruby-preview), [Docs](ruby/README.md)
+| <img src="resources/node.icon.png" width="50" />    | `npm install mvg -g`                                    | `mvg [station]`  | [Preview](#node-preview), [Docs](nodejs/README.md)
+| <img src="resources/python.icon.png" width="50" />  | `git clone git@github.com:entwicklerstube/mvg-cli.git`  | `python mvg.py`  | [Preview](#python-preview), [Docs](python/README.md)
+| <img src="resources/ruby.icon.png" width="50" />    | `gem install mvg`                                       | `mvg [station]`  | [Preview](#ruby-preview), [Docs](ruby/README.md)
 
 ## Contribute
 If you want the CLI in your programing language, just write it down and make a pull requests.
