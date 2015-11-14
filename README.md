@@ -1,12 +1,13 @@
 <img src="resources/readme.logo.png" align="right" />
-# MVG - Command Line Interface
-Checkout the MVG-traffic data by querying the arriving/deperature data. You can find the CLI also in your favorite programing language.
 
-| Language                   | Install                                                 | Usage            |
+# MVG - Command Line Interface
+Checkout the MVG-traffic data by querying the arriving/deperature data from you Terminal.
+
+| Language                   | Install                                                 | Usage            | Links
 | -------------------------- | ------------------------------------------------------- | ---------------- | --------------------------
-| ![](resources/node.png)    | `npm install mvg -g`                                    | `mvg [station]`  | [Preview](#node-preview), [Docs](nodejs/README.md)
-| ![](resources/python.png)  | `git clone git@github.com:entwicklerstube/mvg-cli.git`  | `python mvg.py`  | [Preview](#python-preview), [Docs](python/README.md)
-| ![](resources/ruby.png)    | `gem install mvg`                                       | `mvg [station]`  | [Preview](#ruby-preview), [Docs](ruby/README.md)
+| <img src="resources/node.icon.png" width="100" />    | `npm install mvg -g`                                    | `mvg [station]`  | [Preview](#node-preview), [Docs](nodejs/README.md)
+| <img src="resources/python.icon.png" width="100" />  | `git clone git@github.com:entwicklerstube/mvg-cli.git`  | `python mvg.py`  | [Preview](#python-preview), [Docs](python/README.md)
+| <img src="resources/ruby.icon.png" width="100" />    | `gem install mvg`                                       | `mvg [station]`  | [Preview](#ruby-preview), [Docs](ruby/README.md)
 
 ## Contribute
 If you want the CLI in your programing language, just write it down and make a pull requests.
