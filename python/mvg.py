@@ -5,24 +5,17 @@ from bs4 import BeautifulSoup
 import time
 import os
 from colored import fg, bg, attr
+import urllib
 
 station = u'Unterföhring'
 
 
 def make_request_string(string):
-    replace_dict = dict()
-    replace_dict['ö'] = '%f6'
-    replace_dict[' '] = '+'
-    replace_dict['ü'] = '%FC'
-    replace_dict['ä'] = '%E4'
-
-    station_url = string.replace(u'ö', '%f6').replace(u'ü', '%FC').replace(u'ä', '%E4').replace(' ', '+')
-    
+    station_url = string.encode("latin-1")
+    station_url = urllib.quote(station_url)
     return station_url.lower()
 
- 
 station_url = make_request_string(station)
-
 
 while True:
     os.system('clear')
