@@ -25,6 +25,7 @@ while True:
 
     ubahn=[]
     sbahn=[]
+    tram=[]
     bus=[]
 
     r = requests.get("http://www.mvg-live.de/ims/dfiStaticAuswahl.svc?haltestelle=" + station_url + "&ubahn=checked&bus=checked&tram=checked&sbahn=checked")
@@ -47,6 +48,8 @@ while True:
             ubahn.append(table_line[i] + " - in " + table_time[i] + " minutes - to " + table_place[i].decode('latin-1'))
         elif table_line[i][0]=="S":
             sbahn.append(table_line[i] + " - in " + table_time[i] + " minutes - to " + table_place[i].decode('latin-1'))
+        elif int(table_line[i]) < 50:
+            tram.append(table_line[i] + " - in " + table_time[i] + " minutes - to " + table_place[i].decode('latin-1'))
         else:
             bus.append(table_line[i] + " - in " + table_time[i] + " minutes - to " + table_place[i].decode('latin-1'))
     print '\n'
@@ -72,9 +75,20 @@ while True:
     print "-" * 50
 
     print '\n'
+    print ('%s%s Tram %s' % (fg('white'), bg('cyan'), attr('reset')))
+    if len(tram)==0:
+            print ('%s No Tram from this station %s' % (fg('yellow'), attr('res_bold')))
+    for idx, x in enumerate(tram):
+        if idx == 0:
+            print ('%s%s %s %s' % (fg('white'), bg('red'), x, attr('reset')))
+        else:
+            print x
+    print "-" * 50
+
+    print '\n'
     print ('%s%s Bus %s' % (fg('white'), bg('blue'), attr('reset')))
     if len(bus)==0:
-            print ('%s No Bus from this station %s' % (fg('yellow'), attr('res_bold')))
+            print ('%s No Bus/Tram from this station %s' % (fg('yellow'), attr('res_bold')))
     for idx, x in enumerate(bus):
         if idx == 0:
             print ('%s%s %s %s' % (fg('white'), bg('red'), x, attr('reset')))
