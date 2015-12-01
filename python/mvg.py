@@ -46,7 +46,7 @@ def printStations(station):
         if truc.text:
             table_time.append(truc.text.encode('latin-1').strip())
 
-    print ('%s%s From %s %s' % (fg('black'), bg('white'), station, attr('bold')))
+    print ('%s%s From %s %s' % (fg('black'), bg('white'), station, attr('reset')))
 
     for i in range(1,len(table_line)):
         if table_line[i][0]=="U":
