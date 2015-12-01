@@ -7,9 +7,14 @@ import os
 from colored import fg, bg, attr
 import urllib
 import sys, getopt
+import signal
 
 reload(sys)
 sys.setdefaultencoding('utf8')
+
+def signal_handler(signal, frame):
+    sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
 
 def encode_request_string(station):
     station_url = station.encode("latin-1")
