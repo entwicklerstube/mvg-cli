@@ -21,7 +21,7 @@ def encode_request_string(station):
     station_url = urllib.quote(station_url)
     return station_url.lower()
 
-def printStations(station):
+def printStations(station, hide):
     table_line = []
     table_place = []
     table_time = []
@@ -57,60 +57,67 @@ def printStations(station):
             tram.append(table_line[i] + " - in " + table_time[i] + " minutes - to " + table_place[i].decode('latin-1'))
         else:
             bus.append(table_line[i] + " - in " + table_time[i] + " minutes - to " + table_place[i].decode('latin-1'))
-    print '\n'
-    print ('%s%s Ubahn %s' % (fg('white'), bg('yellow'), attr('reset')))
-    if len(ubahn)==0:
-            print ('%s No Ubahn from this station %s' % (fg('yellow'), attr('res_bold')))
-    for idx, x in enumerate(ubahn):
-        if idx == 0:
-            print ('%s%s %s %s' % (fg('white'), bg('red'), x, attr('reset')))
-        else:
-            print x
-    print "-" * 50
 
-    print '\n'
-    print ('%s%s Sbahn %s' % (fg('white'), bg('green'), attr('reset')))
-    if len(sbahn)==0:
-            print ('%s No Sbahn from this station %s' % (fg('yellow'), attr('res_bold')))
-    for idx, x in enumerate(sbahn):
-        if idx == 0:
-            print ('%s%s %s %s' % (fg('white'), bg('red'), x, attr('reset')))
-        else:
-            print x
-    print "-" * 50
+    if len(ubahn)>0 or not hide:
+        print '\n'
+        print ('%s%s Ubahn %s' % (fg('white'), bg('yellow'), attr('reset')))
+        if len(ubahn)==0:
+                print ('%s No Ubahn from this station %s' % (fg('yellow'), attr('res_bold')))
+        for idx, x in enumerate(ubahn):
+            if idx == 0:
+                print ('%s%s %s %s' % (fg('white'), bg('red'), x, attr('reset')))
+            else:
+                print x
+        print "-" * 50
 
-    print '\n'
-    print ('%s%s Tram %s' % (fg('white'), bg('cyan'), attr('reset')))
-    if len(tram)==0:
-            print ('%s No Tram from this station %s' % (fg('yellow'), attr('res_bold')))
-    for idx, x in enumerate(tram):
-        if idx == 0:
-            print ('%s%s %s %s' % (fg('white'), bg('red'), x, attr('reset')))
-        else:
-            print x
-    print "-" * 50
+    if len(sbahn)>0 or not hide:
+        print '\n'
+        print ('%s%s Sbahn %s' % (fg('white'), bg('green'), attr('reset')))
+        if len(sbahn)==0:
+                print ('%s No Sbahn from this station %s' % (fg('yellow'), attr('res_bold')))
+        for idx, x in enumerate(sbahn):
+            if idx == 0:
+                print ('%s%s %s %s' % (fg('white'), bg('red'), x, attr('reset')))
+            else:
+                print x
+        print "-" * 50
 
-    print '\n'
-    print ('%s%s Bus %s' % (fg('white'), bg('blue'), attr('reset')))
-    if len(bus)==0:
-            print ('%s No Bus/Tram from this station %s' % (fg('yellow'), attr('res_bold')))
-    for idx, x in enumerate(bus):
-        if idx == 0:
-            print ('%s%s %s %s' % (fg('white'), bg('red'), x, attr('reset')))
-        else:
-            print x
+    if len(tram)>0 or not hide:
+        print '\n'
+        print ('%s%s Tram %s' % (fg('white'), bg('cyan'), attr('reset')))
+        if len(tram)==0:
+                print ('%s No Tram from this station %s' % (fg('yellow'), attr('res_bold')))
+        for idx, x in enumerate(tram):
+            if idx == 0:
+                print ('%s%s %s %s' % (fg('white'), bg('red'), x, attr('reset')))
+            else:
+                print x
+        print "-" * 50
+
+    if len(bus)>0 or not hide:
+        print '\n'
+        print ('%s%s Bus %s' % (fg('white'), bg('blue'), attr('reset')))
+        if len(bus)==0:
+                print ('%s No Bus/Tram from this station %s' % (fg('yellow'), attr('res_bold')))
+        for idx, x in enumerate(bus):
+            if idx == 0:
+                print ('%s%s %s %s' % (fg('white'), bg('red'), x, attr('reset')))
+            else:
+                print x
 
 def printHelp():
     print 'mvg.py -s <station>'
     print '       -t : refresh every 10 sec'
+    print '       -x : hide empty lists'
     print '       -h : this help'
 
 def main(argv):
     station = ''
     loop = False
+    hide = False
 
     try:
-        opts, args = getopt.getopt(argv,"hts:", ['station='])
+        opts, args = getopt.getopt(argv,"htxs:", ['station='])
     except getopt.GetoptError:
         printHelp()
         sys.exit(2)
@@ -120,6 +127,8 @@ def main(argv):
             sys.exit()
         elif opt in ("-t"):
             loop = True
+        elif opt in ("-x"):
+            hide = True
         elif opt in ("-s", "--station"):
             station = arg
 
@@ -131,10 +140,10 @@ def main(argv):
     if loop:
         while True:
             os.system('clear')
-            printStations(station)
+            printStations(station, hide)
             time.sleep(10)
     else:
-        printStations(station)
+        printStations(station, hide)
 
 if __name__ == "__main__":
    main(sys.argv[1:])
