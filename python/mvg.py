@@ -6,19 +6,17 @@ import time
 import os
 from colored import fg, bg, attr
 import urllib
+import sys, getopt
 
-station = u'Unterföhring'
+reload(sys)
+sys.setdefaultencoding('utf8')
 
-
-def make_request_string(string):
-    station_url = string.encode("latin-1")
+def encode_request_string(station):
+    station_url = station.encode("latin-1")
     station_url = urllib.quote(station_url)
     return station_url.lower()
 
-station_url = make_request_string(station)
-
-while True:
-    os.system('clear')
+def printStations(station):
     table_line = []
     table_place = []
     table_time = []
@@ -27,6 +25,8 @@ while True:
     sbahn=[]
     tram=[]
     bus=[]
+
+    station_url = encode_request_string(station)
 
     r = requests.get("http://www.mvg-live.de/ims/dfiStaticAuswahl.svc?haltestelle=" + station_url + "&ubahn=checked&bus=checked&tram=checked&sbahn=checked")
     site = BeautifulSoup(r.text, "html.parser")
@@ -94,4 +94,42 @@ while True:
             print ('%s%s %s %s' % (fg('white'), bg('red'), x, attr('reset')))
         else:
             print x
-    time.sleep(10)
+
+def printHelp():
+    print 'mvg.py -s <station>'
+    print '       -t : refresh every 10 sec'
+    print '       -h : this help'
+
+def main(argv):
+    station = ''
+    loop = False
+
+    try:
+        opts, args = getopt.getopt(argv,"hts:", ['station='])
+    except getopt.GetoptError:
+        printHelp()
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            printHelp()
+            sys.exit()
+        elif opt in ("-t"):
+            loop = True
+        elif opt in ("-s", "--station"):
+            station = arg
+
+    if station == '':
+        print 'station is missing'
+        printHelp()
+        sys.exit(3)
+
+    if loop:
+        while True:
+            os.system('clear')
+            printStations(station)
+            time.sleep(10)
+    else:
+        printStations(station)
+
+if __name__ == "__main__":
+   main(sys.argv[1:])
