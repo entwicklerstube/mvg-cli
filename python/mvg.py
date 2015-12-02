@@ -67,8 +67,7 @@ def printStations(station, hide):
             if idx == 0:
                 print ('%s%s %s %s' % (fg('white'), bg('red'), x, attr('reset')))
             else:
-                print x
-        print "-" * 50
+                print ' ' + x
 
     if len(sbahn)>0 or not hide:
         print '\n'
@@ -79,8 +78,7 @@ def printStations(station, hide):
             if idx == 0:
                 print ('%s%s %s %s' % (fg('white'), bg('red'), x, attr('reset')))
             else:
-                print x
-        print "-" * 50
+                print ' ' + x
 
     if len(tram)>0 or not hide:
         print '\n'
@@ -91,8 +89,7 @@ def printStations(station, hide):
             if idx == 0:
                 print ('%s%s %s %s' % (fg('white'), bg('red'), x, attr('reset')))
             else:
-                print x
-        print "-" * 50
+                print ' ' + x
 
     if len(bus)>0 or not hide:
         print '\n'
@@ -103,7 +100,7 @@ def printStations(station, hide):
             if idx == 0:
                 print ('%s%s %s %s' % (fg('white'), bg('red'), x, attr('reset')))
             else:
-                print x
+                print ' ' + x
 
 def printHelp():
     print 'mvg.py -s <station>'
