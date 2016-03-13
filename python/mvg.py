@@ -5,12 +5,29 @@ from bs4 import BeautifulSoup
 import time
 import os
 from colored import fg, bg, attr
-import urllib
 import sys, getopt
 import signal
+import imp
 
-reload(sys)
-sys.setdefaultencoding('utf8')
+if sys.version_info.major == 2:
+    from urllib import quote as urllib_quote
+    imp.reload(sys)
+    sys.setdefaultencoding('utf8')
+
+    strip = lambda x: x.encode('latin-1').strip()
+
+    def _build_line(line, time, place):
+        return "{} - in {} minutes - to {}".format(line.decode('latin-1'),
+                                                   time.decode('latin-1'),
+                                                   place.decode('latin-1'))
+else:
+    from urllib.parse import quote as urllib_quote
+
+    strip = lambda x: x.strip()
+
+    def _build_line(line, time, place):
+        return "{} - in {} minutes - to {}".format(line, time, place)
+
 
 color = True
 
@@ -36,20 +53,39 @@ def attrc(p):
         return ''
 
 def signal_handler(signal, frame):
-    print attrc('reset')
+    print(attrc('reset'))
     sys.exit(0)
 signal.signal(signal.SIGINT, signal_handler)
 
 def encode_request_string(station):
     station_url = station.encode("latin-1")
-    station_url = urllib.quote(station_url)
+    station_url = urllib_quote(station_url)
     return station_url.lower()
 
-def printStations(station, hide):
-    table_line = []
-    table_place = []
-    table_time = []
 
+def _print_line(lines, line_name):
+    print(('{}{} {} {}'.format(fgc('white'),
+                               bgc('yellow'),
+                               line_name,
+                               attrc('reset'))))
+    if not lines:
+        print(('{} No {} from this station {}'.format(fgc('yellow'),
+                                                      line_name,
+                                                      attrc('reset'))))
+    else:
+        try:
+            for idx, x in enumerate(lines):
+                if idx == 0:
+                    print(('{}{} {} {}'.format(fgc('white'),
+                                               bgc('red'),
+                                               x,
+                                               attrc('reset'))))
+                else:
+                    print(' ' + x)
+        except:
+            import ipdb; ipdb.set_trace()
+
+def printStations(station, hide):
     ubahn=[]
     sbahn=[]
     tram=[]
@@ -57,81 +93,54 @@ def printStations(station, hide):
 
     station_url = encode_request_string(station)
 
-    r = requests.get("http://www.mvg-live.de/ims/dfiStaticAuswahl.svc?haltestelle=" + station_url + "&ubahn=checked&bus=checked&tram=checked&sbahn=checked")
+    base_url = "http://www.mvg-live.de/ims/dfiStaticAuswahl.svc?haltestelle="
+    r = requests.get(base_url + station_url + "&ubahn=checked&bus=checked&tram=checked&sbahn=checked")
     site = BeautifulSoup(r.text, "html.parser")
 
-    for truc in site.find_all('td', {"class":"lineColumn"}):
-        table_line.append(truc.text.encode('latin-1').strip())
+    table_line = [truc.text
+                  for truc in site.find_all('td', {"class":"lineColumn"})]
 
-    for truc in site.find_all('td', {"class":"stationColumn"}):
-        table_place.append(truc.find(text=True, recursive=False).encode('latin-1').strip())
+    table_place = [truc.find(text=True, recursive=False)
+                   for truc in site.find_all('td', {"class":"stationColumn"})]
 
-    for truc in site.find_all('td', {"class":"inMinColumn"}):
-        if truc.text:
-            table_time.append(truc.text.encode('latin-1').strip())
+    table_time = [truc.text
+                  for truc in site.find_all('td', {"class":"inMinColumn"})
+                  if truc.text]
 
-    print ('%s%s From %s %s' % (fgc('black'), bgc('white'), station, attrc('reset')))
+    table_line  = [strip(truc) for truc in table_line]
+    table_place = [strip(truc) for truc in table_place]
+    table_time  = [strip(truc) for truc in table_time]
 
-    for i in range(1,len(table_line)):
-        if table_line[i][0]=="U":
-            ubahn.append(table_line[i] + " - in " + table_time[i] + " minutes - to " + table_place[i].decode('latin-1'))
-        elif table_line[i][0]=="S":
-            sbahn.append(table_line[i] + " - in " + table_time[i] + " minutes - to " + table_place[i].decode('latin-1'))
+    print(('{}{} From {} {}'.format(fgc('black'), bgc('white'),
+                                    station, attrc('reset'))))
+
+    for i in range(1, len(table_line)):
+        line = _build_line(table_line[i], table_time[i], table_place[i])
+        if table_line[i][0] == "U":
+            ubahn.append(line)
+        elif table_line[i][0] == "S":
+            sbahn.append(line)
         elif int(table_line[i]) < 50:
-            tram.append(table_line[i] + " - in " + table_time[i] + " minutes - to " + table_place[i].decode('latin-1'))
+            tram.append(line)
         else:
-            bus.append(table_line[i] + " - in " + table_time[i] + " minutes - to " + table_place[i].decode('latin-1'))
+            bus.append(line)
 
-    if len(ubahn)>0 or not hide:
-        print '\n'
-        print ('%s%s Ubahn %s' % (fgc('white'), bgc('yellow'), attrc('reset')))
-        if len(ubahn)==0:
-                print ('%s No Ubahn from this station %s' % (fgc('yellow'), attrc('reset')))
-        for idx, x in enumerate(ubahn):
-            if idx == 0:
-                print ('%s%s %s %s' % (fgc('white'), bgc('red'), x, attrc('reset')))
-            else:
-                print ' ' + x
+    if not hide:
+        _print_line(ubahn, 'Ubahn')
+        print('\n')
+        _print_line(sbahn, 'Sbahn')
+        print('\n')
+        _print_line(tram, 'Tram')
+        print('\n')
+        _print_line(bus, 'Bus')
 
-    if len(sbahn)>0 or not hide:
-        print '\n'
-        print ('%s%s Sbahn %s' % (fgc('white'), bgc('green'), attrc('reset')))
-        if len(sbahn)==0:
-                print ('%s No Sbahn from this station %s' % (fgc('yellow'), attrc('reset')))
-        for idx, x in enumerate(sbahn):
-            if idx == 0:
-                print ('%s%s %s %s' % (fgc('white'), bgc('red'), x, attrc('reset')))
-            else:
-                print ' ' + x
-
-    if len(tram)>0 or not hide:
-        print '\n'
-        print ('%s%s Tram %s' % (fgc('white'), bgc('cyan'), attrc('reset')))
-        if len(tram)==0:
-                print ('%s No Tram from this station %s' % (fgc('yellow'), attrc('reset')))
-        for idx, x in enumerate(tram):
-            if idx == 0:
-                print ('%s%s %s %s' % (fgc('white'), bgc('red'), x, attrc('reset')))
-            else:
-                print ' ' + x
-
-    if len(bus)>0 or not hide:
-        print '\n'
-        print ('%s%s Bus %s' % (fgc('white'), bgc('blue'), attrc('reset')))
-        if len(bus)==0:
-                print ('%s No Bus/Tram from this station %s' % (fgc('yellow'), attrc('reset')))
-        for idx, x in enumerate(bus):
-            if idx == 0:
-                print ('%s%s %s %s' % (fgc('white'), bgc('red'), x, attrc('reset')))
-            else:
-                print ' ' + x
 
 def printHelp():
-    print 'mvg.py -s <station>'
-    print '       -t : refresh every 10 sec'
-    print '       -x : hide empty lists'
-    print '       -c : no color'
-    print '       -h : this help'
+    print('mvg.py -s <station>')
+    print('       -t : refresh every 10 sec')
+    print('       -x : hide empty lists')
+    print('       -c : no color')
+    print('       -h : this help')
 
 def main(argv):
     global color
@@ -158,7 +167,7 @@ def main(argv):
             station = arg
 
     if station == '':
-        print 'station is missing'
+        print('station is missing')
         printHelp()
         sys.exit(3)
 
