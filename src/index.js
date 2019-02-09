@@ -1,37 +1,19 @@
-import React, { Component } from 'react';
-import { render, Color, Box } from 'ink';
+import React from 'react';
+import { render } from 'ink';
+import meow from 'meow';
 
-class MVG extends Component {
-	constructor() {
-		super();
+import MVG from './renderer';
 
-		this.state = {
-			i: 0
-		};
-	}
+console.log('hey');
 
-	componentDidMount() {
-		this.timer = setInterval(() => {
-			this.setState({
-				i: this.state.i + 1
-			});
-		}, 100);
-	}
+const cli = meow(
+	`
+	Usage
+	  $ mvg
 
-	componentWillUnmount() {
-		clearInterval(this.timer);
-	}
+	Examples
+	  $ mvg
+`
+);
 
-	render() {
-		const { foo } = this.props;
-		return (
-			<Box>
-				<Box>a -{foo}</Box>
-				<Box>b</Box>
-				foo: bar: <Color green>{this.state.i} tests passed</Color>
-			</Box>
-		);
-	}
-}
-
-render(<MVG foo='bar' />);
+render(<MVG {...cli.flags} />);

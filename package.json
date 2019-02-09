@@ -6,6 +6,8 @@
 	"dependencies": {
 		"got": "^9.6.0",
 		"ink": "^2.0.0-11",
+		"ink-spinner": "^2.0.0",
+		"meow": "^5.0.0",
 		"prop-types": "^15.6.2",
 		"react": "^16.8.1"
 	},
@@ -30,7 +32,9 @@
 			"transform-es2015-modules-commonjs"
 		],
 		"presets": [
-			"@babel/preset-react",
+			[
+				"@babel/preset-react"
+			],
 			"minify",
 			[
 				"@babel/preset-env",
