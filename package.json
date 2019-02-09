@@ -1,0 +1,62 @@
+{
+	"name": "mvg-cli",
+	"version": "2.0.0",
+	"description": "A command line interface for the mvg (munich traffic organization)",
+	"main": "build/index.js",
+	"dependencies": {
+		"got": "^9.6.0",
+		"ink": "^2.0.0-11",
+		"prop-types": "^15.6.2",
+		"react": "^16.8.1"
+	},
+	"devDependencies": {
+		"@babel/cli": "^7.2.3",
+		"@babel/core": "^7.2.2",
+		"@babel/node": "^7.2.2",
+		"@babel/preset-env": "^7.3.1",
+		"@babel/preset-react": "^7.0.0",
+		"babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+		"babel-preset-minify": "^0.5.0"
+	},
+	"scripts": {
+		"start": "babel-node src",
+		"build": "babel -w src --out-dir build"
+	},
+	"files": [
+		"mvg-cli.js"
+	],
+	"babel": {
+		"plugins": [
+			"transform-es2015-modules-commonjs"
+		],
+		"presets": [
+			"@babel/preset-react",
+			"minify",
+			[
+				"@babel/preset-env",
+				{
+					"targets": {
+						"esmodules": true
+					}
+				}
+			]
+		]
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/entwicklerstube/mvg-cli.git"
+	},
+	"keywords": [
+		"cli",
+		"mvg",
+		"munich",
+		"public",
+		"transportation"
+	],
+	"author": "Michael J. Zoidl",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/entwicklerstube/mvg-cli/issues"
+	},
+	"homepage": "https://github.com/entwicklerstube/mvg-cli#readme"
+}
